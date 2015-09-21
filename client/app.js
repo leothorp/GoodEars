@@ -1,6 +1,6 @@
 angular.module('et', [
-  // 'et.sonority',
-  // 'et.playback',
+ 'et.sonority',
+   'et.intervals',
    'ui.router'])
 
 //check on ui-sref-active="selected" from 25:16 of solution lecture
@@ -14,18 +14,23 @@ angular.module('et', [
 //placing the equal sign as the value of this property, means it will have 2way data binding and be passed an object
 //& lets you pass in a function
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('');
+  $urlRouterProvider.otherwise('/');
   $stateProvider
-    .state('sonority', {
-      templateURL: '' ,
-      url: '' ,
-      controller: '' 
-
+    .state('nothing', {
+      template: '',
+      url: '/'
     })
-    .state('playback', {
-      templateURL: '' ,
-      url: '' ,
-      controller: '' 
+    .state('sonority', {
+      templateUrl: 'sonority/sonority.html',
+      //template: '<div>hey</div>',
+      url: '/sonority',
+      controller: 'SonorityController' 
+    })
+    .state('intervals', {
+      //watch out for a potential issue: lack of slash before url
+      templateUrl: 'intervals/intervals.html' ,
+      url: '/intervals' ,
+      controller: 'IntervalsController' 
       
     });
 

@@ -5,15 +5,19 @@
     <title>ET</title>
     <link rel='stylesheet' type='text/css' href='lib/bootstrap.min.css'/>
     <link rel='stylesheet' type='text/css' href='styles.css'/>
-    <script defer src='../bower_components/angular/angular.js'></script>
+    <script defer src='lib/angular.min.js'></script>
     <script defer src='lib/angular-ui-router.min.js'></script>
     <script defer src='lib/ui-bootstrap-tpls.min.js'></script>
     <script defer src='app.js'></script>
+    <script defer src='sonority/sonority.js'></script>
+    <script defer src='intervals/intervals.js'></script>
   </head>
   <body>   
-    <h1>dddd</h1>
-    <button class="btn btn-primary">click on</button>
-    <input>efsef</input>
+    <div id='nav'></div>
+    <button ui-sref="sonority"></button>
+    <button ui-sref="intervals"></button>
+
+    <div ui-view></div>
    
   </body>
 </html>  
