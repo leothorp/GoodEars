@@ -1,32 +1,47 @@
 angular.module('et.sonority', [])
 //video 35:32 shows the directive way you could do this.
-.controller('SonorityController', function($scope, $window, $interval, soundFactory) {
+.controller('SonorityController', function($scope, $window, $interval, soundFactory, $modal) {
   //var audioCtx = new AudioContext();
   // var audioCtx = soundFactory;
   // var oscillator = audioCtx.createOscillator();
+  $scope.open = function() {
+    var modalInstance = $modal.open({
+      templateUrl: '../instructions/instructions.html'
+    });
+  };  
   var keyboard = new QwertyHancock({
                  id: 'keyboard',
                  width: 600,
                  height: 150,
                  octaves: 2,
-                 startNote: 'A3',
+                 startNote: 'C3',
                  whiteNotesColour: 'white',
                  blackNotesColour: 'black',
                  hoverColour: '#0F64FF'
             });
-
   
+  $scope.setWaveType = function(wave) {
+      console.log($scope.waveType);
+    $scope.waveType = wave.toLowerCase();
+    console.log($scope.waveType);
+    $scope.oscillators.forEach(function(oscObj) {
+      oscObj.osc.type = $scope.waveType;
+    });
+  };
+  $scope.waveType = 'triangle';
   var nodes = [];
+  $scope.waveOptions = ['Sine', 'Triangle', 'Sawtooth', 'Square'];
   keyboard.keyDown = function (note, exp) {
-
+    console.log(note);
 
     //440 * Math.pow(2, ((key_number - 49) / 12) * 2)
     var multiplier = $scope.cents / 100;
     exp = exp * multiplier;
     frequency = 440 * Math.pow(2, exp);
+    console.log('frequency: ', frequency);
 
     var oscillator = audioCtx.createOscillator();
-    oscillator.type = 'triangle';
+    oscillator.type = $scope.waveType;
     oscillator.frequency.value = frequency;
     oscillator.connect(masterGainNode);
     oscillator.start(0);
@@ -35,6 +50,7 @@ angular.module('et.sonority', [])
   };
   
   keyboard.keyUp = function (note, exp) {
+    console.log('keyup');
     var new_nodes = [];
     var multiplier = $scope.cents / 100;
     exp = exp * multiplier;
@@ -55,14 +71,14 @@ angular.module('et.sonority', [])
   
   masterGainNode.connect(audioCtx.destination);
   $scope.masterVolume = masterGainNode.gain;
-  $scope.masterVolume.value = .3;
+  $scope.masterVolume.value = .15;
   //$scope.max = '100';
   $scope.progressing = false;
   $scope.cents = 100;
   $scope.oscillators = [];
   $scope.makeOscillator = function() {
     var osc = audioCtx.createOscillator();
-    osc.type = 'triangle';
+    osc.type = $scope.waveType;
     osc.start();
     var gain = audioCtx.createGain();
     gain.gain.value = .25;

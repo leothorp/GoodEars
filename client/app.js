@@ -1,7 +1,8 @@
 angular.module('et', [
  'et.sonority',
    'et.intervals',
-   'ui.router'])
+   'ui.router',
+   'ui.bootstrap'])
 
 //check on ui-sref-active="selected" from 25:16 of solution lecture
 //uise ui-view instead of ng-view
@@ -16,19 +17,24 @@ angular.module('et', [
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/sonority');
   $stateProvider
-    .state('root', {
-      template: '',
-      url: '/'
-    })
+
     .state('sonority', {
       templateUrl: 'sonority/sonority.html',
       url: '/sonority',
       controller: 'SonorityController' 
     })
-    .state('intervals', {
-      //watch out for a potential issue: lack of slash before url
-      templateUrl: 'intervals/intervals.html' ,
-      url: '/intervals' ,
-      controller: 'IntervalsController' 
+    .state('instructions', {
+      templateUrl: 'instructions/instructions.html',
+      url: '/instructions'
     });
+    // .state('root', {
+    //   template: '',
+    //   url: '/'
+    // })
+    // .state('intervals', {
+    //   //watch out for a potential issue: lack of slash before url
+    //   templateUrl: 'intervals/intervals.html' ,
+    //   url: '/intervals' ,
+    //   controller: 'IntervalsController' 
+    // });
 }]);
