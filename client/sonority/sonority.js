@@ -12,9 +12,43 @@ angular.module('et.sonority', [])
                  startNote: 'A3',
                  whiteNotesColour: 'white',
                  blackNotesColour: 'black',
-                 hoverColour: '#f3e939'
+                 hoverColour: '#0F64FF'
             });
 
+  
+  var nodes = [];
+  keyboard.keyDown = function (note, exp) {
+
+
+    //440 * Math.pow(2, ((key_number - 49) / 12) * 2)
+    var multiplier = $scope.cents / 100;
+    exp = exp * multiplier;
+    frequency = 440 * Math.pow(2, exp);
+
+    var oscillator = audioCtx.createOscillator();
+    oscillator.type = 'triangle';
+    oscillator.frequency.value = frequency;
+    oscillator.connect(masterGainNode);
+    oscillator.start(0);
+
+    nodes.push(oscillator);
+  };
+  
+  keyboard.keyUp = function (note, exp) {
+    var new_nodes = [];
+    var multiplier = $scope.cents / 100;
+    exp = exp * multiplier;
+    frequency = 440 * Math.pow(2, exp);
+    for (var i = 0; i < nodes.length; i++) {
+      if (Math.round(nodes[i].frequency.value) === Math.round(frequency)) {
+        nodes[i].stop(0);
+        nodes[i].disconnect();
+      } else {
+        new_nodes.push(nodes[i]);
+      }
+    }
+    nodes = new_nodes;
+  };
 
   var audioCtx = new AudioContext();
   var masterGainNode = audioCtx.createGain();
@@ -24,7 +58,7 @@ angular.module('et.sonority', [])
   $scope.masterVolume.value = .3;
   //$scope.max = '100';
   $scope.progressing = false;
-
+  $scope.cents = 100;
   $scope.oscillators = [];
   $scope.makeOscillator = function() {
     var osc = audioCtx.createOscillator();

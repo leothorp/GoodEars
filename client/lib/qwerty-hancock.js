@@ -71,7 +71,7 @@
             startNote:      user_settings.startNote || 'A3',
             whiteKeyColour: user_settings.whiteKeyColour || '#fff',
             blackKeyColour: user_settings.blackKeyColour || '#000',
-            activeColour:   user_settings.activeColour || 'yellow',
+            activeColour:   user_settings.activeColour || '#0F64FF',
             borderColour:   user_settings.borderColour || '#000',
             keyboardLayout: user_settings.keyboardLayout || 'en'
         };
@@ -115,8 +115,9 @@
         } else {
             key_number = key_number + ((octave - 1) * 12) + 1;
         }
-
-        return 440 * Math.pow(2, (key_number - 49) / 12);
+        //original return value, but we want to manipulate it pre-exponentiation     
+        //return 440 * Math.pow(2, (key_number - 49) / 12);
+        return (key_number - 49) / 12;
     };
 
     /**
