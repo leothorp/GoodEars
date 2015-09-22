@@ -1,16 +1,29 @@
 angular.module('et.sonority', [])
 //video 35:32 shows the directive way you could do this.
-.controller('SonorityController', function($scope, soundFactory) {
+.controller('SonorityController', function($scope, $window, $interval, soundFactory) {
   //var audioCtx = new AudioContext();
   // var audioCtx = soundFactory;
   // var oscillator = audioCtx.createOscillator();
+  var keyboard = new QwertyHancock({
+                 id: 'keyboard',
+                 width: 600,
+                 height: 150,
+                 octaves: 2,
+                 startNote: 'A3',
+                 whiteNotesColour: 'white',
+                 blackNotesColour: 'black',
+                 hoverColour: '#f3e939'
+            });
+
+
   var audioCtx = new AudioContext();
   var masterGainNode = audioCtx.createGain();
   
   masterGainNode.connect(audioCtx.destination);
   $scope.masterVolume = masterGainNode.gain;
-  $scope.masterVolume.value = .5;
+  $scope.masterVolume.value = .3;
   //$scope.max = '100';
+  $scope.progressing = false;
 
   $scope.oscillators = [];
   $scope.makeOscillator = function() {
@@ -35,6 +48,7 @@ angular.module('et.sonority', [])
     for (var i = 0; i < number; i++) {
       $scope.makeOscillator();
     }
+    console.log($scope.oscillators);
     $scope.oscillators.forEach(function(oscObj) {
       oscObj.osc.frequency.value = Math.ceil(Math.random() * 1500);
       $scope.toggleSound(oscObj);
@@ -42,11 +56,30 @@ angular.module('et.sonority', [])
 
   };
 
+  var progression = function() {
+    //$scope.interval = $window.setInterval(function() {$scope.randomize() }, 2000);
+    $scope.randomize();
+    $scope.interval = $interval($scope.randomize, 2000);
+  };
+
+  var endProgression = function() {
+    console.log('ending');
+    //$window.clearInterval($scope.interval);
+    $interval.cancel($scope.interval);
+  };
+
+  
+
+  $scope.toggleProgression = function() {
+    ('progression? ', $scope.progressing);
+    $scope.progressing ? endProgression() : progression();
+    $scope.progressing = !$scope.progressing;
+  };
+
   $scope.stopAll = function() {
     $scope.oscillators.forEach(function(oscObj) {
       if (oscObj.playing) $scope.toggleSound(oscObj);
     });
-
   };
 
   $scope.toggleSound = function(oscObj) {

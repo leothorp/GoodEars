@@ -14,15 +14,14 @@ angular.module('et', [
 //placing the equal sign as the value of this property, means it will have 2way data binding and be passed an object
 //& lets you pass in a function
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/sonority');
   $stateProvider
-    .state('nothing', {
+    .state('root', {
       template: '',
       url: '/'
     })
     .state('sonority', {
       templateUrl: 'sonority/sonority.html',
-      //template: '<div>hey</div>',
       url: '/sonority',
       controller: 'SonorityController' 
     })
@@ -31,8 +30,5 @@ angular.module('et', [
       templateUrl: 'intervals/intervals.html' ,
       url: '/intervals' ,
       controller: 'IntervalsController' 
-      
     });
-
-
 }]);

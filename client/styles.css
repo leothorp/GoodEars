@@ -9,16 +9,36 @@
 
 }
 
+h1 {
+  text-align: center;
+}
+
+#sonority-container {
+  margin: 0px, auto;
+}
+
+#keyboard {
+  display: block;
+  margin: 30px auto !important;
+}
+
 #master-vol {
   width: 100px;
 }
 
 .repeatingDiv {
+  text-align: center;
   display: inline-block;
   margin-right: 10px;
 }
 
+#wrapper {
+  display: block;
+  text-align: center;
+}
+
 .mainControls {
+  text-align: center;
   display: block;
   margin: auto;
   margin-bottom: 40px;

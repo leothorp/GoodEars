@@ -1,18 +1,24 @@
 <div id='sonority-container'>
+  <h1>Sonority Generator</h1>
   <div class='mainControls'>
     <button class='btn' ng-click="makeOscillator()">Add</button>
-    <input id='master-vol' type='range' ng-model = 'masterVolume.value' min='0' max='1' step='.01' val='.5'></input>
+    <input id='master-vol' type='range' ng-model = 'masterVolume.value' min='0' max='.6' step='.01' val='.3'></input>
     <button class='btn' ng-click="randomize()">Randomize</button>
+    <button class='btn' ng-click="toggleProgression()">{{progressing ? 'Stop Progression' : 'Start Progression'}}</button>
     <button class='btn' ng-click="stopAll()">Stop All</button>
   </div>
-  <div class='repeatingDiv' ng-repeat='oscillator in oscillators'>
-    <div class='entryDiv'>
-      <button isPlaying='false' ng-click="toggleSound(oscillator, $event)" class='btn btn-primary playToggle'>{{oscillator.playing ? 'Stop' : 'Start'}}</button>
-      <input  class='freq-entry' type='number' ng-model = 'oscillator.osc.frequency.value' step='{{notestep}}'></input>  
-      <input class='step-input' type='number' ng-model ='notestep'></input>
-    </div> 
-    <input class='osc-sliders' ng-model='oscillator.osc.frequency.value'  type='range' min='0' max='3000' step='{{notestep}}' val='440'></input>
-    <input class='osc-sliders' ng-model='oscillator.gain.gain.value'  type='range' min='0' max='1' step='.01' val='.25'></input>
-   
+  <div id='wrapper'>
+    <div class='repeatingDiv' ng-repeat='oscillator in oscillators'>
+
+      <div class='entryDiv'>
+        <button isPlaying='false' ng-click="toggleSound(oscillator, $event)" class='btn btn-primary playToggle'>{{oscillator.playing ? 'Stop' : 'Start'}}</button>
+        <input  class='freq-entry' placeholder='Freq' type='number' ng-model = 'oscillator.osc.frequency.value' step='{{notestep}}'></input>  
+        <input class='step-input' placeholder='Step' type='number' ng-model ='notestep'></input>
+      </div> 
+      <input class='osc-sliders' ng-model='oscillator.osc.frequency.value'  type='range' min='0' max='3000' step='{{notestep}}' val='440'></input>
+      <input class='osc-sliders' ng-model='oscillator.gain.gain.value'  type='range' min='0' max='1' step='.01' val='.25'></input>
+     
+    </div>
   </div>  
+  <div id='keyboard'></div>  
 </div>  
