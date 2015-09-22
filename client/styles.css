@@ -1,0 +1,45 @@
+.osc-sliders {
+  /*display: inline;*/
+
+  -webkit-appearance: slider-vertical;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 80px;
+  width: 2px;
+
+}
+
+#master-vol {
+  width: 100px;
+}
+
+.repeatingDiv {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.mainControls {
+  display: block;
+  margin: auto;
+  margin-bottom: 40px;
+}
+
+.entryDiv {
+  display: inline-block;
+}
+
+.playToggle {
+  float: top, left;
+}
+button {
+  display: inline-block;
+}
+
+.step-input {
+  width: 60px;
+  display: block;
+}
+.freq-entry {
+  width: 60px;
+  display: block;
+}

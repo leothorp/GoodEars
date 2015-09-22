@@ -1,43 +1,79 @@
 angular.module('et.sonority', [])
-
+//video 35:32 shows the directive way you could do this.
 .controller('SonorityController', function($scope, soundFactory) {
   //var audioCtx = new AudioContext();
   // var audioCtx = soundFactory;
   // var oscillator = audioCtx.createOscillator();
-  $scope.playing = false;
-  $scope.isPlaying = 'start';
-  $scope.toggleSound= function() {
-    if (!$scope.playing) {
-      soundFactory.startSound();
-        $scope.isPlaying = 'stop';
-    } else {
-      soundFactory.stopSound();
-        $scope.isPlaying = 'start';
-    }  
-    $scope.playing = !$scope.playing;
-  };  
-}).factory('soundFactory', function() {
   var audioCtx = new AudioContext();
-  var oscillators = [];
-  console.log('context in fac: ', audioCtx);
-    var osc2 = audioCtx.createOscillator();
-    console.log('osc2: ', osc2);
-  var startSound = function() {
+  var masterGainNode = audioCtx.createGain();
+  
+  masterGainNode.connect(audioCtx.destination);
+  $scope.masterVolume = masterGainNode.gain;
+  $scope.masterVolume.value = .5;
+  //$scope.max = '100';
 
+  $scope.oscillators = [];
+  $scope.makeOscillator = function() {
     var osc = audioCtx.createOscillator();
     osc.type = 'triangle';
-    oscillators.push(osc);
-    console.log('osc: ', osc);
-    osc.connect(audioCtx.destination);
     osc.start();
-    console.log(osc);
+    var gain = audioCtx.createGain();
+    gain.gain.value = .25;
+    gain.connect(masterGainNode);
+    var oscObj = {
+      osc: osc,
+      playing: false,
+      gain: gain
+    };
+    $scope.oscillators.push(oscObj);
+  };
+
+  $scope.randomize = function() {
+    var number = Math.ceil(Math.random() * 10);
+    $scope.stopAll();
+    $scope.oscillators = [];
+    for (var i = 0; i < number; i++) {
+      $scope.makeOscillator();
+    }
+    $scope.oscillators.forEach(function(oscObj) {
+      oscObj.osc.frequency.value = Math.ceil(Math.random() * 1500);
+      $scope.toggleSound(oscObj);
+    });
 
   };
-  var stopSound = function() {
-    oscillators[0].stop();
-    oscillators = [];
-  }
 
-  return {startSound: startSound,
-          stopSound: stopSound};
-});
+  $scope.stopAll = function() {
+    $scope.oscillators.forEach(function(oscObj) {
+      if (oscObj.playing) $scope.toggleSound(oscObj);
+    });
+
+  };
+
+  $scope.toggleSound = function(oscObj) {
+    oscObj.playing ? soundFactory.stop(oscObj) : soundFactory.start(oscObj);
+    oscObj.playing = !oscObj.playing; 
+
+  };  
+  $scope.setVolume = function(oscObj, vol) {
+    // console.log('set vol', vol);
+    // oscObj.gain.gain.value = vol/100;
+    // console.log();
+
+  };
+  // $scope.setFreq = function(oscObj, freq) {
+  //   oscObj.osc.frequency.value = freq;
+  //   console.log('set: ', freq);
+  // };
+}).factory('soundFactory', function() {
+
+  var start = function(oscObj) {
+    if (!oscObj.playing) oscObj.osc.connect(oscObj.gain);
+  };
+  var stop = function(oscObj) {
+    if (oscObj.playing) oscObj.osc.disconnect();
+  };
+  return {
+    start: start,
+    stop: stop    
+  };
+})
